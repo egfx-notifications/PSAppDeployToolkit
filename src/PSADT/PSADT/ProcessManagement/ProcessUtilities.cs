@@ -56,6 +56,10 @@ namespace PSADT.ProcessManagement
 
                 // Get the command line for the process. Failing that, just get the image path.
                 string? commandLine;
+                if (process.HasExited)
+                {
+                    return [];
+                }
                 try
                 {
                     commandLine = GetProcessCommandLine(process);
@@ -72,6 +76,10 @@ namespace PSADT.ProcessManagement
                 }
 
                 // If we couldn't get the command line or the file path is malformed, try and get the process's image name.
+                if (process.HasExited)
+                {
+                    return [];
+                }
                 try
                 {
                     if (argv?.Length > 0)
@@ -138,6 +146,10 @@ namespace PSADT.ProcessManagement
                     string[] argv;
                     try
                     {
+                        if (process.HasExited)
+                        {
+                            continue;
+                        }
                         argv = GetProcessArgv(process, processArgvMap, ntPathLookupTable);
                     }
                     catch (ArgumentException)
